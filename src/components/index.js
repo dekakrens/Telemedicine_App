@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 const card = (props) => {
     const navigation = useNavigation();
     return(
-        <TouchableOpacity style={styles.card} onPress={()=> navigation(props.screenName)}>
+        <TouchableOpacity style={styles.card} onPress={()=> navigation.navigate(props.screenName)}>
             <View style={styles.cardIcon}>
                 <Icon name={props.iconName} size={40}/>
                 <Text>{props.monitoring}</Text>
