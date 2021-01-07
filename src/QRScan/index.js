@@ -38,7 +38,7 @@ function QRScan () {
                       navigation.navigate('HeartScreen')
                   }
                    if (e.data == "3C:71:BF:74:89:C2" ){
-                      navigation.navigate('TempssScreen')
+                      navigation.navigate('TempScreen')
                   }
               })}
               flashMode={RNCamera.Constants.FlashMode.auto}
