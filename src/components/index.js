@@ -1,16 +1,18 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import styles from '../Styles';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { useNavigation } from '@react-navigation/native';
 
 const card = (props) => {
+    const navigation = useNavigation();
     return(
-        <View style={styles.card}>
+        <TouchableOpacity style={styles.card} onPress={()=> navigation(props.screenName)}>
             <View style={styles.cardIcon}>
                 <Icon name={props.iconName} size={40}/>
                 <Text>{props.monitoring}</Text>
             </View>
-        </View>
+        </TouchableOpacity>
     )
 }
 

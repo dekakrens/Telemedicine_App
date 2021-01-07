@@ -3,8 +3,8 @@ import { View, Text } from 'react-native';
 
 const ChatScreen = () => {
     return(
-        <View style={{justifyContent: 'center', alignItems: 'center'}}>
-            <Text>Halooo</Text>
+        <View>
+            <Text>Apaaa</Text>
         </View>
     )
 }
