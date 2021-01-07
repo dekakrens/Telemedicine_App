@@ -5,8 +5,8 @@ import HomeScreen from '../HomeScreen';
 import ChatScreen from '../ChatScreen';
 import QRScan from '../QRScan';
 import WeightScreen from '../WeightScreen';
-import HeartScreen from '../HeartScreen';
-import TempScreen from '../TempScreen';
+// import HeartScreen from '../HeartScreen';
+// import TempScreen from '../TempScreen';
 
 const Stack = createStackNavigator();
 
@@ -38,7 +38,7 @@ const StackScreen = () => {
                 component={WeightScreen}
                 options={{headerShown: false}}
             />
-            <Stack.Screen
+            {/* <Stack.Screen
                 name="HeartScreen"
                 component={HeartScreen}
                 options={{headerShown: false}}
@@ -47,7 +47,7 @@ const StackScreen = () => {
                 name="TempScreen"
                 component={TempScreen}
                 options={{headerShown: false}}
-            />
+            /> */}
         </Stack.Navigator>
     )
 }
