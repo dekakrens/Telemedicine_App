@@ -7,6 +7,7 @@ import QRScan from '../QRScan';
 import WeightScreen from '../WeightScreen';
 import HeartScreen from '../HeartScreen';
 import TempScreen from '../TempScreen';
+// import WiFiBTScreen from '../WiFiBTScreen';
 
 const Stack = createStackNavigator();
 
@@ -48,6 +49,11 @@ const StackScreen = () => {
                 component={TempScreen}
                 options={{headerShown: false}}
             />
+            {/* <Stack.Screen
+                name="WiFiBTScreen"
+                component={WiFiBTScreen}
+                options={{headerShown: false}}
+            /> */}
         </Stack.Navigator>
     )
 }
