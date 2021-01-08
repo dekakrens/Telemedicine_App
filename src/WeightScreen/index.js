@@ -27,7 +27,7 @@ export default class WeightScreen extends React.Component {
   }
 
   async notifBtn() {
-    const id = "24:6F:28:15:87:DA"
+    const id = "10:52:1C:68:14:E2"
     const characteristicID = '1006'
     const serviceID = '180D'
   await BleManager.startNotification(id, serviceID, '1141');
@@ -43,7 +43,7 @@ export default class WeightScreen extends React.Component {
   // Actions triggereng BleManagerDidUpdateValueForCharacteristic event
 }
   async writeBtn1(){
-    const id = "24:6F:28:15:87:DA"
+    const id = "10:52:1C:68:14:E2"
     const characteristicID = '78604f25-789e-432e-b949-6fb2306fd5d7'
     const serviceID = '180D'
     
@@ -84,7 +84,7 @@ export default class WeightScreen extends React.Component {
 
   }
   async writeBtn2(){
-    const id = "24:6F:28:15:87:DA"
+    const id = "10:52:1C:68:14:E2"
     const characteristicID = '78604f25-789e-432e-b949-6fb2306fd5d7'
     const serviceID = '180D'
     

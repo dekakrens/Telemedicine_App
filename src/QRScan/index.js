@@ -32,10 +32,10 @@ function QRScan () {
               onRead={(e)=> BleManager.connect(e.data).then(()=> {
                   console.log('Connected')
                   if (e.data == "10:52:1C:68:14:E2" ){
-                      navigation.navigate('HeartScreen')
+                      navigation.navigate('WeightScreen')
                   }
                   if (e.data == "24:6F:28:15:87:DA" ){
-                      navigation.navigate('WeightScreen')
+                      navigation.navigate('HeartScreen')
                   }
                    if (e.data == "3C:71:BF:74:89:C2" ){
                       navigation.navigate('TempScreen')
