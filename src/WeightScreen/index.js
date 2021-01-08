@@ -18,6 +18,10 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 import BleManager from "react-native-ble-manager"
 import { stringToBytes } from 'convert-string';
+import { NativeModules, NativeEventEmitter } from "react-native";
+ 
+const BleManagerModule = NativeModules.BleManager;
+const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 
 
 export default class WeightScreen extends React.Component {
@@ -26,8 +30,24 @@ export default class WeightScreen extends React.Component {
 
     this.writeBtn1 = this.writeBtn1.bind(this);
     this.writeBtn2 = this.writeBtn2.bind(this);
+    this.notifBtn = this.notifBtn.bind(this);
   }
-
+  async notifBtn() {
+    const id = '10:52:1C:68:14:E2'
+    const characteristicID = '00004f25-0000-1000-8000-00805f9b34fb'
+    const serviceID = '181D'
+  await BleManager.startNotification(id, serviceID, characteristicID);
+  // Add event listener
+  bleManagerEmitter.addListener(
+    "BleManagerDidUpdateValueForCharacteristic",
+    ({ value, id, serviceID, characteristicID }) => {
+      // Convert bytes array to string
+      const data = value;
+      console.log('Received ' +data);
+    }
+  );
+  // Actions triggereng BleManagerDidUpdateValueForCharacteristic event
+}
   async writeBtn1(){
     const id = '10:52:1C:68:14:E2'
     const characteristicID = '00004f25-0000-1000-8000-00805f9b34fb'
@@ -101,6 +121,9 @@ export default class WeightScreen extends React.Component {
         </TouchableOpacity>
         <TouchableOpacity style={styles.connectBtn} onPress={this.writeBtn2}>
           <Text style={{fontSize: 40}}>Write 2</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.connectBtn} onPress={this.notifBtn}>
+          <Text style={{fontSize: 40}}>Notification</Text>
         </TouchableOpacity>
       </View>
       );
