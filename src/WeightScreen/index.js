@@ -8,7 +8,6 @@ import {
   StatusBar,
   TouchableOpacity 
 } from 'react-native';
-
 import BleManager from "react-native-ble-manager"
 import { stringToBytes, bytesToString } from 'convert-string';
 import { NativeModules, NativeEventEmitter } from "react-native";
@@ -20,15 +19,42 @@ const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 export default class WeightScreen extends React.Component {
   constructor(props){
     super(props)
+     this.state = {
+            dataesp: '',
+            analyzeesp: '',
+        }
 
     this.writeBtn1 = this.writeBtn1.bind(this);
+    this.hasilNotif = this.hasilNotif.bind(this);
     this.writeBtn2 = this.writeBtn2.bind(this);
     this.notifBtn = this.notifBtn.bind(this);
+    this.stopNotif = this.stopNotif.bind(this);
   }
-
+  async stopNotif (){
+    BleManager.stopNotification('10:52:1C:68:14:E2','180D','1006');
+    BleManager.stopNotification('10:52:1C:68:14:E2','180D','1141');
+  }
   async notifBtn() {
     const id = "10:52:1C:68:14:E2"
     const characteristicID = '1006'
+    const serviceID = '180D'
+  await BleManager.startNotification(id, serviceID, '1006');
+  // Add event listener
+  bleManagerEmitter.addListener(
+    "BleManagerDidUpdateValueForCharacteristic",
+    ({ value}) => {
+      // Convert bytes array to string
+      const data = bytesToString(value);
+      this.setState({dataesp: data});
+      console.log('Received ' +data);
+      
+    }
+  );
+  // Actions triggereng BleManagerDidUpdateValueForCharacteristic event
+}
+async hasilNotif() {
+  const id = "10:52:1C:68:14:E2"
+    const characteristicID = '1141'
     const serviceID = '180D'
   await BleManager.startNotification(id, serviceID, '1141');
   // Add event listener
@@ -36,11 +62,14 @@ export default class WeightScreen extends React.Component {
     "BleManagerDidUpdateValueForCharacteristic",
     ({ value}) => {
       // Convert bytes array to string
-      const data = bytesToString(value);
-      console.log('Received ' +data);
+      const datahasil = bytesToString(value);
+      this.setState({analyzeesp: datahasil});
+      console.log('Received ' +datahasil);
+      
     }
   );
   // Actions triggereng BleManagerDidUpdateValueForCharacteristic event
+  
 }
   async writeBtn1(){
     const id = "10:52:1C:68:14:E2"
@@ -62,7 +91,7 @@ export default class WeightScreen extends React.Component {
 
       }, 500);
 
-      BleManager.startNotification(id, serviceID, '1006');
+ 
   
   //     bleManagerEmitter.addListener(
   //       "BleManagerDidUpdateValueForCharacteristic",
@@ -103,6 +132,7 @@ export default class WeightScreen extends React.Component {
             BleManager.write(id, serviceID, characteristicID, data).then(() => {
               console.log("Success Write");
               
+              
             }).catch((e) => {
               console.log(e)
             });
@@ -120,14 +150,26 @@ export default class WeightScreen extends React.Component {
     return (
       <View>
         <TouchableOpacity style={styles.connectBtn} onPress={this.writeBtn1}>
-          <Text style={{fontSize: 40}}>Write 1</Text>
+          <Text style={{fontSize: 30}}>Write 1</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.connectBtn} onPress={this.writeBtn2}>
-          <Text style={{fontSize: 40}}>Write 2</Text>
+          <Text style={{fontSize: 30}}>Write 2</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.connectBtn} onPress={this.notifBtn}>
-          <Text style={{fontSize: 40}}>Notification</Text>
+          <Text style={{fontSize: 30}}>Get data from BLE</Text>
         </TouchableOpacity>
+        <TouchableOpacity style={styles.connectBtn} onPress={this.hasilNotif}>
+          <Text style={{fontSize: 30}}>Analyze Heart Rate</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.connectBtn} onPress={this.stopNotif}>
+          <Text style={{fontSize: 30}}>Stop Notif</Text>
+        </TouchableOpacity>
+            <Text style={styles.connectBtn}>
+            {this.state.dataesp}
+             </Text>
+            <Text style={styles.connectBtn}>
+            {this.state.analyzeesp}
+             </Text>
       </View>
       );
   }
@@ -139,7 +181,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     borderColor: "red",
     borderWidth: 1,
-    marginTop: "20%",
+    marginTop: "10%",
     
   }
 });

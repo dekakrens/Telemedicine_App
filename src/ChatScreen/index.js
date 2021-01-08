@@ -20,7 +20,7 @@ const decryptData = (encryptedData, key) => Aes.decrypt(encryptedData.cipher, ke
 try {
     generateKey('Arnold', 'salt', 5000, 256).then(key => {
         console.log('Key:', key)
-        encryptData('These violent delights have violent ends', key)
+        encryptData('30', key)
             .then(({ cipher, iv }) => {
                 console.log('Encrypted:', cipher)
  
