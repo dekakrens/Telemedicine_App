@@ -29,22 +29,29 @@ function QRScan () {
     return(
         <View style={{flex: 1}}>
             <QRCodeScanner
-              onRead={(e)=> BleManager.connect(e.data).then(()=> {
-                  console.log('Connected')
-                  if (e.data == "10:52:1C:68:14:E2" ){
-                      navigation.navigate('HeartScreen')
-                  }
-                  if (e.data == "24:6F:28:15:87:DA" ){
-                      navigation.navigate('WeightScreen')
-                  }
-                   if (e.data == "3C:71:BF:74:89:C2" ){
-                      navigation.navigate('TempScreen')
-                  }
-              })}
-              flashMode={RNCamera.Constants.FlashMode.auto}
+                onRead={(e)=> BleManager.connect(e.data).then(()=> {
+                    console.log('Connected')
+                    BleManager.retrieveServices(e.data).then((peripheralInfo) => {
+                        switch(peripheralInfo,characteristics.[4].service) {
+                            case '180d':
+                              navigation.navigate('HeartScreen');
+                              break;
+                            case '181d':
+                              navigation.navigate('TempScreen');
+                              break;
+                            case '182d':
+                                navigation.navigate('WeightScreen');
+                                break;
+                            default:
+                                console.log('error')
+                        }
+                        console.log(peripheralInfo,characteristics.[4].service)
+                    });
+                })}
+                flashMode={RNCamera.Constants.FlashMode.auto}
             />
         </View>
-        )
+    )
 }
 
 export default QRScan;

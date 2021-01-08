@@ -28,9 +28,9 @@ export default class WeightScreen extends React.Component {
 
   async notifBtn() {
     const id = "24:6F:28:15:87:DA"
-    const characteristicID = '1006'
+    const characteristicID = '1141'
     const serviceID = '180D'
-  await BleManager.startNotification(id, serviceID, '1141');
+  await BleManager.startNotification(id, serviceID, characteristicID);
   // Add event listener
   bleManagerEmitter.addListener(
     "BleManagerDidUpdateValueForCharacteristic",
@@ -40,7 +40,6 @@ export default class WeightScreen extends React.Component {
       console.log('Received ' +data);
     }
   );
-  // Actions triggereng BleManagerDidUpdateValueForCharacteristic event
 }
   async writeBtn1(){
     const id = "24:6F:28:15:87:DA"
@@ -51,7 +50,6 @@ export default class WeightScreen extends React.Component {
     console.log(data)
 
     BleManager.retrieveServices(id).then((peripheralInfo) => {
-      //console.log(peripheralInfo);
       setTimeout(() => {
         BleManager.write(id, serviceID, characteristicID, data).then(() => {
           console.log("Success Write");
@@ -61,25 +59,6 @@ export default class WeightScreen extends React.Component {
         });
 
       }, 500);
-
-      BleManager.startNotification(id, serviceID, '1006');
-  
-  //     bleManagerEmitter.addListener(
-  //       "BleManagerDidUpdateValueForCharacteristic",
-  //       ( value, id, serviceID, '1006' ) => {
-  //         const data = value;
-  //         console.log('Received ' +data);
-  //       }
-  // );
-
-      // setTimeout(() => {
-      //   BleManager.startNotification(id, serviceID, '1006').then(() => {
-      //     console.log('Started notification on ' + id);
-          
-      //   }).catch((error) => {
-      //     console.log('Notification error', error);
-      //   });
-      // }, 200);
     });
 
   }
@@ -87,8 +66,6 @@ export default class WeightScreen extends React.Component {
     const id = "24:6F:28:15:87:DA"
     const characteristicID = '78604f25-789e-432e-b949-6fb2306fd5d7'
     const serviceID = '180D'
-    
-    
 
     const data = stringToBytes('2');
     console.log(data)
