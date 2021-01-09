@@ -1,4 +1,4 @@
-import React from 'react';
+
 import {
   SafeAreaView,
   StyleSheet,
@@ -6,9 +6,12 @@ import {
   View,
   Text,
   StatusBar,
+  ActivityIndicator, 
+  FlatList,
   TouchableOpacity 
 } from 'react-native';
 import BleManager from "react-native-ble-manager"
+import React, { useEffect, useState } from 'react';
 import { stringToBytes, bytesToString } from 'convert-string';
 import { NativeModules, NativeEventEmitter } from "react-native";
  
@@ -19,20 +22,52 @@ const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 export default class WeightScreen extends React.Component {
   constructor(props){
     super(props)
-     this.state = {
-            dataesp: '',
-            analyzeesp: '',
-        }
+        this.state = {
+          dataesp: '',
+          analyzeesp: '',
+  }
 
     this.writeBtn1 = this.writeBtn1.bind(this);
     this.hasilNotif = this.hasilNotif.bind(this);
     this.writeBtn2 = this.writeBtn2.bind(this);
     this.notifBtn = this.notifBtn.bind(this);
     this.stopNotif = this.stopNotif.bind(this);
+    this.postkeAPI = this.postkeAPI.bind(this);
+    this.getdrAPI = this.getdrAPI.bind(this);
   }
+    
   async stopNotif (){
     BleManager.stopNotification('10:52:1C:68:14:E2','180D','1006');
     BleManager.stopNotification('10:52:1C:68:14:E2','180D','1141');
+  }
+  async postkeAPI (){
+    try 
+    {
+      await fetch('http://192.168.1.4:5000/input/bb', {
+      method: 'POST',
+      headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+      },
+    body: JSON.stringify({
+    berat: '55',
+  })
+}); console.log("Data sent");
+    }catch(e){
+      console.log(e);
+    }
+  }
+  async getdrAPI (){
+     try {
+    let response = await fetch(
+      'http://192.168.1.4:5000/info/bb'
+    );
+    let json = await response.json();
+    const databerat = json.webberat;
+    console.log("Received data" +JSON.stringify(databerat));
+  } catch (error) {
+    console.error(error);
+  }
   }
   async notifBtn() {
     const id = "10:52:1C:68:14:E2"
@@ -146,23 +181,30 @@ async hasilNotif() {
 
   }
 
-  render(){
+  render() 
+  {
     return (
       <View>
         <TouchableOpacity style={styles.connectBtn} onPress={this.writeBtn1}>
-          <Text style={{fontSize: 30}}>Write 1</Text>
+          <Text style={{fontSize: 20}}>Write 1</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.connectBtn} onPress={this.writeBtn2}>
-          <Text style={{fontSize: 30}}>Write 2</Text>
+          <Text style={{fontSize: 20}}>Write 2</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.connectBtn} onPress={this.notifBtn}>
-          <Text style={{fontSize: 30}}>Get data from BLE</Text>
+          <Text style={{fontSize: 20}}>Get data from BLE</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.connectBtn} onPress={this.hasilNotif}>
-          <Text style={{fontSize: 30}}>Analyze Heart Rate</Text>
+          <Text style={{fontSize: 20}}>Analyze Heart Rate</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.connectBtn} onPress={this.stopNotif}>
-          <Text style={{fontSize: 30}}>Stop Notif</Text>
+          <Text style={{fontSize: 20}}>Stop Notif</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.connectBtn} onPress={this.postkeAPI}>
+          <Text style={{fontSize: 20}}>Post data to Server</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.connectBtn} onPress={this.getdrAPI}>
+          <Text style={{fontSize: 20}}>Get data Server</Text>
         </TouchableOpacity>
             <Text style={styles.connectBtn}>
             {this.state.dataesp}
