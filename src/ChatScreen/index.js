@@ -4,23 +4,21 @@ import { NativeModules, Platform } from 'react-native'
 var Aes = NativeModules.Aes
 
 const ChatScreen = () => {
-const generateKey = (password, salt, cost, length) => Aes.pbkdf2(password, salt, cost, length)
- 
+const text = '40';
+const key = '591825e3a4f2c9b8f73eb963c77ad160d4802ad7aadc179b066275bcb9d9cfd2';
+const iv = '0123456789abcdef0123456789abcdef';
 const encryptData = (text, key) => {
-    return Aes.randomKey(16).then(iv => {
         return Aes.encrypt(text, key, iv).then(cipher => ({
             cipher,
             iv,
         }))
-    })
+    
 }
  
 const decryptData = (encryptedData, key) => Aes.decrypt(encryptedData.cipher, key, encryptedData.iv)
  
 try {
-    generateKey('Arnold', 'salt', 5000, 256).then(key => {
-        console.log('Key:', key)
-        encryptData('30', key)
+        encryptData(text, key)
             .then(({ cipher, iv }) => {
                 console.log('Encrypted:', cipher)
  
@@ -32,14 +30,10 @@ try {
                         console.log(error)
                     })
  
-                Aes.hmac256(cipher, key).then(hash => {
-                    console.log('HMAC', hash)
-                })
             })
             .catch(error => {
                 console.log(error)
             })
-    })
 } catch (e) {
     console.error(e)
 }

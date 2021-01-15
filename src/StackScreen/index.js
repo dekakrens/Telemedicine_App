@@ -8,6 +8,7 @@ import WeightScreen from '../WeightScreen';
 import HeartScreen from '../HeartScreen';
 import TempScreen from '../TempScreen';
 import WiFiBTScreen from '../WiFiBTScreen';
+import SetWifiSuhu from '../SetWifiSuhu';
 
 const Stack = createStackNavigator();
 
@@ -52,6 +53,11 @@ const StackScreen = () => {
             <Stack.Screen
                 name="WiFiBTScreen"
                 component={WiFiBTScreen}
+                options={{headerShown: false}}
+            />
+            <Stack.Screen
+                name="SetWifiSuhu"
+                component={SetWifiSuhu}
                 options={{headerShown: false}}
             />
         </Stack.Navigator>

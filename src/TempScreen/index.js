@@ -8,7 +8,7 @@ import {
   StatusBar,
   TouchableOpacity 
 } from 'react-native';
-
+import { useNavigation } from '@react-navigation/native';
 import BleManager from "react-native-ble-manager"
 import { stringToBytes, bytesToString } from 'convert-string';
 import { NativeModules, NativeEventEmitter } from "react-native";
@@ -20,19 +20,21 @@ const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 export default class TempScreen extends React.Component {
   constructor(props){
     super(props)
-
+    this.state = {
+          dataesp: '',
+  }
+   
     this.writeBtn1 = this.writeBtn1.bind(this);
-    this.writeBtn2 = this.writeBtn2.bind(this);
     this.notifBtn = this.notifBtn.bind(this);
   }
 
   async notifBtn() {
-    const id = "3C:71:BF:74:89:C2"
-    const characteristicID = '1006'
-    const serviceID = '180D'
-  await BleManager.startNotification(id, serviceID, '1141');
+    const id = "10:52:1C:68:14:E2"
+    const characteristicID = 'a8e6a804-216b-4dd8-90ff-a230226b42c1'
+    const serviceID = '182D'
+    await BleManager.startNotification(id, serviceID, 'a8e6a804-216b-4dd8-90ff-a230226b42c1');
   // Add event listener
-  bleManagerEmitter.addListener(
+    bleManagerEmitter.addListener(
     "BleManagerDidUpdateValueForCharacteristic",
     ({ value}) => {
       // Convert bytes array to string
@@ -43,15 +45,14 @@ export default class TempScreen extends React.Component {
   // Actions triggereng BleManagerDidUpdateValueForCharacteristic event
 }
   async writeBtn1(){
-    const id = "3C:71:BF:74:89:C2"
+    const id = "10:52:1C:68:14:E2"
     const characteristicID = '78604f25-789e-432e-b949-6fb2306fd5d7'
-    const serviceID = '180D'
+    const serviceID = '182D'
     
     const data = stringToBytes('1');
     console.log(data)
 
     BleManager.retrieveServices(id).then((peripheralInfo) => {
-      //console.log(peripheralInfo);
       setTimeout(() => {
         BleManager.write(id, serviceID, characteristicID, data).then(() => {
           console.log("Success Write");
@@ -61,73 +62,44 @@ export default class TempScreen extends React.Component {
         });
 
       }, 500);
-
-      BleManager.startNotification(id, serviceID, '1006');
-  
-  //     bleManagerEmitter.addListener(
-  //       "BleManagerDidUpdateValueForCharacteristic",
-  //       ( value, id, serviceID, '1006' ) => {
-  //         const data = value;
-  //         console.log('Received ' +data);
-  //       }
-  // );
-
-      // setTimeout(() => {
-      //   BleManager.startNotification(id, serviceID, '1006').then(() => {
-      //     console.log('Started notification on ' + id);
-          
-      //   }).catch((error) => {
-      //     console.log('Notification error', error);
-      //   });
-      // }, 200);
     });
 
   }
-  async writeBtn2(){
-    const id = "3C:71:BF:74:89:C2"
-    const characteristicID = '78604f25-789e-432e-b949-6fb2306fd5d7'
-    const serviceID = '180D'
-    
-    
-
-    const data = stringToBytes('2');
-    console.log(data)
-
-    BleManager.retrieveServices(id).then((peripheralInfo) => {
-      //console.log(peripheralInfo);
-
-      setTimeout(() => {
-        BleManager.startNotification(id, serviceID, characteristicID).then(() => {
-          console.log('Started notification on ' + id);
-          setTimeout(() => {
-            BleManager.write(id, serviceID, characteristicID, data).then(() => {
-              console.log("Success Write");
-              
-            }).catch((e) => {
-              console.log(e)
-            });
-
-          }, 500);
-        }).catch((error) => {
-          console.log('Notification error', error);
-        });
-      }, 200);
-    });
-
-  }
+  async notifBtn() {
+    const id = "10:52:1C:68:14:E2"
+    const characteristicID = 'a8e6a804-216b-4dd8-90ff-a230226b42c1'
+    const serviceID = '182d'
+  await BleManager.startNotification(id, serviceID, 'a8e6a804-216b-4dd8-90ff-a230226b42c1');
+  // Add event listener
+  bleManagerEmitter.addListener(
+    "BleManagerDidUpdateValueForCharacteristic",
+    ({ value}) => {
+      // Convert bytes array to string
+      const data = bytesToString(value);
+      this.setState({dataesp: data});
+      console.log('Received ' +data);
+      
+    }
+  );
+  // Actions triggereng BleManagerDidUpdateValueForCharacteristic event
+}
 
   render(){
+    const { navigation } = this.props;
     return (
       <View>
         <TouchableOpacity style={styles.connectBtn} onPress={this.writeBtn1}>
-          <Text style={{fontSize: 40}}>Write 1</Text>
+          <Text style={{fontSize: 40}}>Send Data via BLE</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.connectBtn} onPress={this.writeBtn2}>
-          <Text style={{fontSize: 40}}>Write 2</Text>
+        <TouchableOpacity style={styles.connectBtn}  onPress={() => this.props.navigation.navigate('SetWifiSuhu')}>
+          <Text style={{fontSize: 40}}>Send Data via WiFi</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.connectBtn} onPress={this.notifBtn}>
-          <Text style={{fontSize: 40}}>Notification</Text>
+          <Text style={{fontSize: 40}}>Get Data from BLE</Text>
         </TouchableOpacity>
+        <Text style={styles.connectBtn}>
+            {this.state.dataesp}
+        </Text>
       </View>
       );
   }
