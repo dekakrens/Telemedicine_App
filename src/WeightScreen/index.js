@@ -4,6 +4,7 @@ import {
   StyleSheet,
   ScrollView,
   View,
+  Alert,
   Text,
   StatusBar,
   ActivityIndicator, 
@@ -25,8 +26,10 @@ export default class WeightScreen extends React.Component {
     
     super(props)
         this.state = {
-          heart:[],
           dataesp: '',
+          heart: '',
+          encrypt_string: '',
+          nilaisuhu: '',
   }
     
     this.writeBtn1 = this.writeBtn1.bind(this);
@@ -44,11 +47,12 @@ export default class WeightScreen extends React.Component {
     BleManager.stopNotification('10:52:1C:68:14:E2','182d','1141');
   }
   async postkeAPI (){
-    axios.post('http://159.89.204.122/input/dj', {
-    Heart_Rate: '80 bpm',
+    axios.post('http://159.89.204.122/input/berat', {
+    berat: '40',
   })
   .then(function (response) {
     console.log("Data sent");
+    Alert.alert('Data terkirim');
   })
   .catch(function (error) {
     console.log(error);
@@ -57,7 +61,8 @@ export default class WeightScreen extends React.Component {
   async decryptAES () {
     const key = '591825e3a4f2c9b8f73eb963c77ad160d4802ad7aadc179b066275bcb9d9cfd2';
     const iv = '0123456789abcdef0123456789abcdef';
-    const cipher = encrypt_string;
+    const cipher = this.state.encrypt_string;
+    const decryptData = (encryptedData: { cipher: any; iv: any; }, key: any) => Aes.decrypt(encryptedData.cipher, key, encryptedData.iv)
 
     try {
       var decrypt_string = await decryptData({ cipher, iv }, key);
@@ -81,21 +86,22 @@ export default class WeightScreen extends React.Component {
     try {
       encryptDataIV(value, key, iv).then(({ cipher }) => {
         console.log ("encrypted : " + cipher);
+        this.setState({encrypt_string:cipher});
       }).catch((error: any) => {})
     } catch (e) {
         console.error(e)
     }
   }
   async getdrAPI (){
-    axios.get('http://159.89.204.122/info/dj')
-    .then(function (response) {
-      const heart = response.data.webserver1[0].Heart_Rate;
-      // setTitle(response.data.title);
-      
-      // handle success
-      // console.log(response);
-      console.log(heart);
-    })
+     axios.get('http://159.89.204.122/info/dj')
+    .then(response => this.setState({nilaisuhu: response.data.webserver1[0].heart.Heart_Rate}))
+    .catch(err => console.log(err))
+    // axios.get('http://159.89.204.122/info/dj')
+    // .then(function (response) {
+    //   const heart = response.data.webserver1[0].heart;
+    //   console.log(heart);
+    //   this.setState({nilaisuhu: heart});
+    // })
     // // this.setState({heart: data});
     // return fetch('http://159.89.204.122/info/dj')
     // .then((response) => response.json())
@@ -112,7 +118,7 @@ export default class WeightScreen extends React.Component {
   async notifBtn() {
     const id = "10:52:1C:68:14:E2"
     const characteristicID = 'a8e6a804-216b-4dd8-90ff-a230226b42c1'
-    const serviceID = '182d'
+    const serviceID = '181a'
   await BleManager.startNotification(id, serviceID, 'a8e6a804-216b-4dd8-90ff-a230226b42c1');
   // Add event listener
   bleManagerEmitter.addListener(
@@ -122,7 +128,6 @@ export default class WeightScreen extends React.Component {
       const data = bytesToString(value);
       this.setState({dataesp: data});
       console.log('Received ' +data);
-      
     }
   );
   // Actions triggereng BleManagerDidUpdateValueForCharacteristic event
@@ -149,7 +154,7 @@ export default class WeightScreen extends React.Component {
   async writeBtn1(){
     const id = "10:52:1C:68:14:E2"
     const characteristicID = '78604f25-789e-432e-b949-6fb2306fd5d7'
-    const serviceID = '182d'
+    const serviceID = '181a'
     
     const data = stringToBytes('1');
     console.log(data)

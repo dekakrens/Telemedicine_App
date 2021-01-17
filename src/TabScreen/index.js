@@ -2,7 +2,7 @@ import React from 'react';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import HomeScreen from '../HomeScreen';
-import ChatScreen from '../ChatScreen';
+import InformationScreen from '../InformationScreen';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -25,10 +25,10 @@ const TabScreen = () => {
                 }}
             />
             <Tab.Screen
-                name='Chat'
-                component={ChatScreen}
+                name='Information'
+                component={InformationScreen}
                 options={{
-                    tabBarLabel: 'Chat',
+                    tabBarLabel: 'Information',
                     tabBarIcon: ({color}) => (
                         <Icon name='chatbox-ellipses-sharp' color={color} size={26}/>
                     )

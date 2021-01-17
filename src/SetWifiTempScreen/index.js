@@ -1,15 +1,16 @@
 import React, { Component, useState } from 'react'
-import { View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput, StyleSheet, Alert} from 'react-native'
 import BleManager from "react-native-ble-manager"
 import { stringToBytes } from 'convert-string';
 import axios from 'axios';
-class SetWifiSuhu extends Component {
+import { useNavigation } from '@react-navigation/native';
+class SetWifiTempScreen extends Component {
    state = {
       ssid: '',
       password: '',
-      heart : '',
       nilaisuhu: '',
    }
+   
    handleSSID = (text) => {
       this.setState({ ssid: text })
    }
@@ -17,7 +18,7 @@ class SetWifiSuhu extends Component {
       this.setState({ password: text })
    }
    initwifi = (ssid, password) => {
-      alert('SSID: ' + ssid + ' Password: ' + password)
+      Alert.alert('SSID: ' + ssid + ' Password: ' + password)
       const id = "10:52:1C:68:14:E2"
       const serviceID = '182d'
     
@@ -56,15 +57,32 @@ class SetWifiSuhu extends Component {
         });
       }, 200);
    }
-   getdatawifinya (){
-    axios.get('http://159.89.204.122/info/dj')
-    .then(function (response) {
-      const heart = response.data.webserver1[0].Heart_Rate;
-      console.log(heart);
-      this.setState({nilaisuhu: heart})
+
+   // getdatawifinya (){
+   //    this.navigation.navigate('TempScreen')
+   // }
+//   getdatawifinya (){
+//    axios.get('http://159.89.204.122/info/dj')
+//    .then(response => this.setState({nilaisuhu: response.data.webserver1[1].heart.Heart_Rate}))
+//    .catch(err => console.log(err))
+//   }
+//    // axios({
+//    //    method: 'get',
+//    //    url: 'http://159.89.204.122/info/dj'
+//    //  }).then((response) => {
+//    //    this.setState({nilaisuhu: response.data.webserver1[0].heart})
+//    //    console.log('Datanya [' + this.state.nilaisuhu + ']')
+//    //  }).catch(function(error) {
+//    //    console.log(error)
+//    //  });
+//   }
+   //  axios.get('http://159.89.204.122/info/dj')
+   //  .then(function (response) {
+   //    this.setState({ nilaisuhu: response.data.webserver1[0].heart})
+   //    console.log(heart);
       
-    })
-  }
+   //  })
+  
 
    render() {
       return (
@@ -90,18 +108,16 @@ class SetWifiSuhu extends Component {
                }>
                <Text style = {styles.submitButtonText}> Send to Device </Text>
             </TouchableOpacity>
-            <TouchableOpacity  onPress={this.getdatawifinya}>
+            {/* <TouchableOpacity  onPress={this.getdatawifinya}>
             <Text style={{fontSize: 30}}> Get Temperature Data </Text>
             </TouchableOpacity>
-            <Text style={{fontSize: 30}}> 
-            {this.state.nilaisuhu}
-            </Text>
+            <Text > {this.state.nilaisuhu} </Text> */}
             
          </View>
       )
    }
 }
-export default SetWifiSuhu
+export default SetWifiTempScreen
 
 const styles = StyleSheet.create({
    container: {

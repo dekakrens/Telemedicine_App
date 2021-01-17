@@ -2,13 +2,13 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import TabScreen from '../TabScreen';
 import HomeScreen from '../HomeScreen';
-import ChatScreen from '../ChatScreen';
+import InformationScreen from '../InformationScreen';
 import QRScan from '../QRScan';
 import WeightScreen from '../WeightScreen';
 import HeartScreen from '../HeartScreen';
 import TempScreen from '../TempScreen';
 import WiFiBTScreen from '../WiFiBTScreen';
-import SetWifiSuhu from '../SetWifiSuhu';
+import SetWifiTempScreen from '../SetWifiTempScreen';
 
 const Stack = createStackNavigator();
 
@@ -26,8 +26,8 @@ const StackScreen = () => {
                 options={{headerShown: false}}
             />
             <Stack.Screen
-                name="ChatScreen"
-                component={ChatScreen}
+                name="InformationScreen"
+                component={InformationScreen}
                 options={{headerShown: false}}
             />
             <Stack.Screen
@@ -56,8 +56,8 @@ const StackScreen = () => {
                 options={{headerShown: false}}
             />
             <Stack.Screen
-                name="SetWifiSuhu"
-                component={SetWifiSuhu}
+                name="SetWifiTempScreen"
+                component={SetWifiTempScreen}
                 options={{headerShown: false}}
             />
         </Stack.Navigator>
