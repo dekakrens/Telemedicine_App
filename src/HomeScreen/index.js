@@ -14,17 +14,17 @@ const HomeScreen = ()=> {
             <Card
                 screenName='HeartScreen'
                 iconName='fitness-outline'
-                monitoring='HRM'
+                monitoring='Heart Rate'
             />
             <Card
                 screenName='TempScreen'
                 iconName='thermometer-outline'
-                monitoring='Temp'
+                monitoring='Body Temp'
             />
             <Card
                 screenName='WeightScreen'
                 iconName='speedometer-outline'
-                monitoring='Weight'
+                monitoring='Body Weight'
             />
 
             <TouchableOpacity style={styles.iconConnect} onPress={() => navigation.navigate('QRScan')}>

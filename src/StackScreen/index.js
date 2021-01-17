@@ -6,6 +6,7 @@ import InformationScreen from '../InformationScreen';
 import QRScan from '../QRScan';
 import WeightScreen from '../WeightScreen';
 import HeartScreen from '../HeartScreen';
+import SplashScreen from '../SplashScreen';
 import TempScreen from '../TempScreen';
 import WiFiBTScreen from '../WiFiBTScreen';
 import SetWifiTempScreen from '../SetWifiTempScreen';
@@ -15,6 +16,11 @@ const Stack = createStackNavigator();
 const StackScreen = () => {
     return(
         <Stack.Navigator>
+            <Stack.Screen
+                name="SplashScreen"
+                component={SplashScreen}
+                options={{headerShown: false}}
+            />
             <Stack.Screen
                 name="TabScreen"
                 component={TabScreen}
