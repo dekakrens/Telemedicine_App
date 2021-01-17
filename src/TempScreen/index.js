@@ -22,17 +22,18 @@ export default class TempScreen extends React.Component {
   constructor(props){
     super(props)
     this.state = {
-          dataesp: '',
+          datasuhu: '',
           nilaisuhu: '',
   }
    
     this.writeBtn1 = this.writeBtn1.bind(this);
     this.notifBtn = this.notifBtn.bind(this);
     this.getdatacloud= this.getdatacloud.bind(this);
+    this.postkeAPI= this.postkeAPI.bind(this);
   }
 async getdatacloud (){
-     axios.get('http://159.89.204.122/info/dj')
-    .then(response => this.setState({nilaisuhu: response.data.webserver1[0].heart.Heart_Rate}))
+     axios.get('http://159.89.204.122/info/ambilsuhu')
+    .then(response => this.setState({nilaisuhu: response.data.webserver1[0].suhu}))
     .catch(err => console.log(err))
 };
 //   async notifBtn() {
@@ -51,10 +52,22 @@ async getdatacloud (){
 //   );
 //   // Actions triggereng BleManagerDidUpdateValueForCharacteristic event
 // }
+async postkeAPI (){
+    axios.post('http://159.89.204.122/input/suhu', {
+    suhu: this.state.datasuhu,
+  })
+  .then(function (response) {
+    console.log("Data sent");
+    Alert.alert('Data terkirim');
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+  }
   async writeBtn1(){
-    const id = "10:52:1C:68:14:E2"
+    const id = "3C:71:BF:74:89:C2"
     const characteristicID = '78604f25-789e-432e-b949-6fb2306fd5d7'
-    const serviceID = '182D'
+    const serviceID = '181a'
     
     const data = stringToBytes('1');
     console.log(data)
@@ -73,9 +86,9 @@ async getdatacloud (){
 
   }
   async notifBtn() {
-    const id = "10:52:1C:68:14:E2"
+    const id = "3C:71:BF:74:89:C2"
     const characteristicID = 'a8e6a804-216b-4dd8-90ff-a230226b42c1'
-    const serviceID = '182d'
+    const serviceID = '181a'
   await BleManager.startNotification(id, serviceID, 'a8e6a804-216b-4dd8-90ff-a230226b42c1');
   // Add event listener
   bleManagerEmitter.addListener(
@@ -83,7 +96,7 @@ async getdatacloud (){
     ({ value}) => {
       // Convert bytes array to string
       const data = bytesToString(value);
-      this.setState({dataesp: data});
+      this.setState({datasuhu: data});
       console.log('Received ' +data);
       
     }
@@ -96,19 +109,22 @@ async getdatacloud (){
     return (
       <View>
         <TouchableOpacity style={styles.connectBtn} onPress={this.writeBtn1}>
-          <Text style={{fontSize: 40}}>Send Data via BLE</Text>
+          <Text style={{fontSize: 20}}>Send Data via BLE</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.connectBtn}  onPress={() => this.props.navigation.navigate('SetWifiTempScreen')}>
-          <Text style={{fontSize: 40}}>Send Data via WiFi</Text>
+          <Text style={{fontSize: 20}}>Send Data via WiFi</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.connectBtn} onPress={this.notifBtn}>
-          <Text style={{fontSize: 40}}>Get Data from BLE</Text>
+          <Text style={{fontSize: 20}}>Get Data from BLE</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.connectBtn} onPress={this.postkeAPI}>
+          <Text style={{fontSize: 20}}>Post Data BLE to server</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.connectBtn} onPress={this.getdatacloud}>
-          <Text style={{fontSize: 40}}>Get Data from Wi-Fi</Text>
+          <Text style={{fontSize: 20}}>Get Data from Server</Text>
         </TouchableOpacity>
         <Text style={styles.connectBtn}>
-            {this.state.dataesp}
+            {this.state.datasuhu}
         </Text>
         <Text style={styles.connectBtn}>
             {this.state.nilaisuhu}

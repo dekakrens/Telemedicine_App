@@ -19,6 +19,7 @@ import { NativeModules, NativeEventEmitter } from "react-native";
 const BleManagerModule = NativeModules.BleManager;
 const bleManagerEmitter = new NativeEventEmitter(BleManagerModule);
 import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
 var Aes = NativeModules.Aes;
 
 export default class WeightScreen extends React.Component {
@@ -29,26 +30,21 @@ export default class WeightScreen extends React.Component {
           dataesp: '',
           heart: '',
           encrypt_string: '',
-          nilaisuhu: '',
+          nilaiberat: '',
   }
     
     this.writeBtn1 = this.writeBtn1.bind(this);
-    this.writeBtn2 = this.writeBtn2.bind(this);
     this.notifBtn = this.notifBtn.bind(this);
-    this.stopNotif = this.stopNotif.bind(this);
     this.postkeAPI = this.postkeAPI.bind(this);
     this.getdrAPI = this.getdrAPI.bind(this);
     this.encryptAES = this.encryptAES.bind(this);
     this.decryptAES = this.decryptAES.bind(this);
   }
     
-  async stopNotif (){
-    BleManager.stopNotification('10:52:1C:68:14:E2','182d','1006');
-    BleManager.stopNotification('10:52:1C:68:14:E2','182d','1141');
-  }
+  
   async postkeAPI (){
     axios.post('http://159.89.204.122/input/berat', {
-    berat: '40',
+    berat: this.state.dataesp,
   })
   .then(function (response) {
     console.log("Data sent");
@@ -93,8 +89,8 @@ export default class WeightScreen extends React.Component {
     }
   }
   async getdrAPI (){
-     axios.get('http://159.89.204.122/info/dj')
-    .then(response => this.setState({nilaisuhu: response.data.webserver1[0].heart.Heart_Rate}))
+     axios.get('http://159.89.204.122/info/ambilberat')
+    .then(response => this.setState({nilaiberat: response.data.webserver1[0].berat}))
     .catch(err => console.log(err))
     // axios.get('http://159.89.204.122/info/dj')
     // .then(function (response) {
@@ -116,9 +112,9 @@ export default class WeightScreen extends React.Component {
   };
   
   async notifBtn() {
-    const id = "10:52:1C:68:14:E2"
+    const id = "24:6F:28:24:BF:1A"
     const characteristicID = 'a8e6a804-216b-4dd8-90ff-a230226b42c1'
-    const serviceID = '181a'
+    const serviceID = '182d'
   await BleManager.startNotification(id, serviceID, 'a8e6a804-216b-4dd8-90ff-a230226b42c1');
   // Add event listener
   bleManagerEmitter.addListener(
@@ -152,9 +148,9 @@ export default class WeightScreen extends React.Component {
   
 
   async writeBtn1(){
-    const id = "10:52:1C:68:14:E2"
+    const id = "24:6F:28:24:BF:1A"
     const characteristicID = '78604f25-789e-432e-b949-6fb2306fd5d7'
-    const serviceID = '181a'
+    const serviceID = '182d'
     
     const data = stringToBytes('1');
     console.log(data)
@@ -173,55 +169,20 @@ export default class WeightScreen extends React.Component {
     });
 
   }
-  async writeBtn2(){
-    const id = "10:52:1C:68:14:E2"
-    const characteristicID = '78604f25-789e-432e-b949-6fb2306fd5d7'
-    const serviceID = '182d'
-    
-    
-
-    const data = stringToBytes('2');
-    console.log(data)
-
-    BleManager.retrieveServices(id).then((peripheralInfo) => {
-      //console.log(peripheralInfo);
-
-      setTimeout(() => {
-        BleManager.startNotification(id, serviceID, characteristicID).then(() => {
-          console.log('Started notification on ' + id);
-          setTimeout(() => {
-            BleManager.write(id, serviceID, characteristicID, data).then(() => {
-              console.log("Success Write");
-              
-              
-            }).catch((e) => {
-              console.log(e)
-            });
-
-          }, 500);
-        }).catch((error) => {
-          console.log('Notification error', error);
-        });
-      }, 200);
-    });
-
-  }
+  
 
   render() 
   {
     return (
       <View>
         <TouchableOpacity style={styles.connectBtn} onPress={this.writeBtn1}>
-          <Text style={{fontSize: 20}}>Write 1</Text>
+          <Text style={{fontSize: 20}}>Send data via BLE</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.connectBtn} onPress={this.writeBtn2}>
-          <Text style={{fontSize: 20}}>Write 2</Text>
+        <TouchableOpacity style={styles.connectBtn} onPress={() => this.props.navigation.navigate('SetWifiWeightScreen')}>
+          <Text style={{fontSize: 20}}>Send data via Wi-Fi</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.connectBtn} onPress={this.notifBtn}>
           <Text style={{fontSize: 20}}>Get data from BLE</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.connectBtn} onPress={this.stopNotif}>
-          <Text style={{fontSize: 20}}>Stop Notif</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.connectBtn} onPress={this.postkeAPI}>
           <Text style={{fontSize: 20}}>Post data to Server</Text>
@@ -237,6 +198,9 @@ export default class WeightScreen extends React.Component {
         </TouchableOpacity>
             <Text style={styles.connectBtn}>
             {this.state.dataesp}
+             </Text>
+            <Text style={styles.connectBtn}>
+            {this.state.nilaiberat}
              </Text>
       </View>
       );

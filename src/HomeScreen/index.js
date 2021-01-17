@@ -26,6 +26,11 @@ const HomeScreen = ()=> {
                 iconName='speedometer-outline'
                 monitoring='Body Weight'
             />
+            <Card
+                screenName='BMIScreen'
+                iconName='body-outline'
+                monitoring='BMI Calculator'
+            />
 
             <TouchableOpacity style={styles.iconConnect} onPress={() => navigation.navigate('QRScan')}>
                 <Icon name='bluetooth-outline' size={30} color={'#fff'}/>

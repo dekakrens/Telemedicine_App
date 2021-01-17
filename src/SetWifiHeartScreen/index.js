@@ -4,7 +4,7 @@ import BleManager from "react-native-ble-manager"
 import { stringToBytes } from 'convert-string';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
-class SetWifiTempScreen extends Component {
+class SetWifiHeartScreen extends Component {
    state = {
       ssid: '',
       password: '',
@@ -19,8 +19,8 @@ class SetWifiTempScreen extends Component {
    }
    initwifi = (ssid, password) => {
       Alert.alert('SSID: ' + ssid + ' Password: ' + password)
-      const id = "3C:71:BF:74:89:C2"
-      const serviceID = '181a'
+      const id = "24:6F:28:15:87:DA"
+      const serviceID = '180d'
     
     const dua = stringToBytes('2');
     const datassid = stringToBytes(ssid);
@@ -117,7 +117,7 @@ class SetWifiTempScreen extends Component {
       )
    }
 }
-export default SetWifiTempScreen
+export default SetWifiHeartScreen
 
 const styles = StyleSheet.create({
    container: {

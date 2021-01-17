@@ -3,7 +3,6 @@ import {StyleSheet} from 'react-native';
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#00a5a7'
     },
     card: {
         flexDirection: 'row',
@@ -42,6 +41,14 @@ const styles = StyleSheet.create({
         color: '#05375a',
         fontSize: 18
     },
+     buttonText: {
+    alignSelf: "center",
+    textAlign:"center",
+    padding: 20,
+    fontSize: 25,
+    color: "#ff00ff",
+    fontWeight: "bold"
+  },
     action: {
         flexDirection: 'row',
         marginTop: 10,

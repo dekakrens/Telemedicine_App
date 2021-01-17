@@ -8,8 +8,10 @@ import WeightScreen from '../WeightScreen';
 import HeartScreen from '../HeartScreen';
 import SplashScreen from '../SplashScreen';
 import TempScreen from '../TempScreen';
-import WiFiBTScreen from '../WiFiBTScreen';
 import SetWifiTempScreen from '../SetWifiTempScreen';
+import SetWifiHeartScreen from '../SetWifiHeartScreen';
+import SetWifiWeightScreen from '../SetWifiWeightScreen';
+import BMIScreen from '../BMIScreen';
 
 const Stack = createStackNavigator();
 
@@ -57,13 +59,23 @@ const StackScreen = () => {
                 options={{headerShown: false}}
             />
             <Stack.Screen
-                name="WiFiBTScreen"
-                component={WiFiBTScreen}
+                name="BMIScreen"
+                component={BMIScreen}
                 options={{headerShown: false}}
             />
             <Stack.Screen
                 name="SetWifiTempScreen"
                 component={SetWifiTempScreen}
+                options={{headerShown: false}}
+            />
+            <Stack.Screen
+                name="SetWifiHeartScreen"
+                component={SetWifiHeartScreen}
+                options={{headerShown: false}}
+            />
+            <Stack.Screen
+                name="SetWifiWeightScreen"
+                component={SetWifiWeightScreen}
                 options={{headerShown: false}}
             />
         </Stack.Navigator>

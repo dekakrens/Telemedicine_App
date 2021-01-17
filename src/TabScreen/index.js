@@ -30,7 +30,7 @@ const TabScreen = () => {
                 options={{
                     tabBarLabel: 'Information',
                     tabBarIcon: ({color}) => (
-                        <Icon name='chatbox-ellipses-sharp' color={color} size={26}/>
+                        <Icon name='information-circle-outline' color={color} size={26}/>
                     )
                 }}
             />

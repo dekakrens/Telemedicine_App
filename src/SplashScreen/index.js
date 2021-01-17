@@ -37,10 +37,10 @@ const SplashScreen = () => {
         >
             <Text style={[styles.title, {
                 color: colors.text
-            }]}>Monitor your own health and stay connected</Text>
-            <Text style={styles.text}>Log in to your account </Text> 
+            }]}>Monitor Your Own Health and Stay Connected</Text>
+            <Text style={styles.text}>Android Based Application for Self Checkup</Text> 
             <View style={styles.button}>
-            <TouchableOpacity onPress={()=>navigation.navigate('HomeScreen')}>
+            <TouchableOpacity onPress={()=>navigation.navigate('TabScreen')}>
                 <LinearGradient
                     colors={['#00a5a7', '#01ab9d']}
                     style={styles.signIn}
