@@ -19,7 +19,7 @@ class SetWifiHeartScreen extends Component {
    }
    initwifi = (ssid, password) => {
       Alert.alert('SSID: ' + ssid + ' Password: ' + password)
-      const id = "24:6F:28:15:87:DA"
+      const id = "3C:71:BF:74:8D:2E"
       const serviceID = '180d'
     
     const dua = stringToBytes('2');
@@ -106,7 +106,7 @@ class SetWifiHeartScreen extends Component {
                onPress = {
                   () => this.initwifi(this.state.ssid, this.state.password)
                }>
-               <Text style = {styles.submitButtonText}> Send to Device </Text>
+               <Text style = {styles.submitButtonText}> Send to Weight Device </Text>
             </TouchableOpacity>
             {/* <TouchableOpacity  onPress={this.getdatawifinya}>
             <Text style={{fontSize: 30}}> Get Temperature Data </Text>
@@ -127,15 +127,18 @@ const styles = StyleSheet.create({
       margin: 15,
       height: 40,
       borderColor: '#7a42f4',
+      fontFamily: 'mmedium',
       borderWidth: 1
    },
    submitButton: {
       backgroundColor: '#7a42f4',
       padding: 10,
+      fontFamily: 'mmedium',
       margin: 15,
       height: 40,
    },
    submitButtonText:{
-      color: 'white'
+      color: 'white',
+      fontFamily: 'mmedium'
    }
 })

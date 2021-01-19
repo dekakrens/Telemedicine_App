@@ -38,7 +38,7 @@ const SplashScreen = () => {
             <Text style={[styles.title, {
                 color: colors.text
             }]}>Monitor Your Own Health and Stay Connected</Text>
-            <Text style={styles.text}>Android Based Application for Self Checkup</Text> 
+            <Text style={styles.text}>Android Application for Self Checkup</Text> 
             <View style={styles.button}>
             <TouchableOpacity onPress={()=>navigation.navigate('TabScreen')}>
                 <LinearGradient
@@ -89,10 +89,12 @@ const styles = StyleSheet.create({
   title: {
       color: '#05375a',
       fontSize: 30,
+      fontFamily: 'mbold',
       fontWeight: 'bold'
   },
   text: {
       color: 'grey',
+      fontFamily: 'mbold',
       marginTop:5
   },
   button: {
@@ -109,7 +111,8 @@ const styles = StyleSheet.create({
   },
   textSign: {
       color: 'white',
-      fontWeight: 'bold'
+      fontWeight: 'bold',
+      fontFamily: 'mbold'
   }
 });
 

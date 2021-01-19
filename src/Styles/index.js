@@ -3,6 +3,7 @@ import {StyleSheet} from 'react-native';
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        fontFamily: 'mbold'
     },
     card: {
         flexDirection: 'row',
@@ -11,7 +12,8 @@ const styles = StyleSheet.create({
         marginTop: 10,
         marginHorizontal: 10,
         borderWidth: 1,
-        borderColor: '#000'
+        borderColor: '#000',
+        fontFamily: 'mbold'
     },
     cardIcon: {
         justifyContent: 'center',
@@ -35,11 +37,13 @@ const styles = StyleSheet.create({
     text_header: {
         color: '#fff',
         fontWeight: 'bold',
-        fontSize: 30
+        fontSize: 30,
+        fontFamily: 'mbold'
     },
     text_footer: {
         color: '#05375a',
-        fontSize: 18
+        fontSize: 18,
+        fontFamily: 'mbold'
     },
      buttonText: {
     alignSelf: "center",
@@ -47,46 +51,47 @@ const styles = StyleSheet.create({
     padding: 20,
     fontSize: 25,
     color: "#ff00ff",
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily: 'mbold'
   },
     action: {
         flexDirection: 'row',
         marginTop: 10,
         borderBottomWidth: 1,
         borderBottomColor: '#f2f2f2',
-        paddingBottom: 5
+        paddingBottom: 5,
+        fontFamily: 'mbold'
     },
     actionError: {
         flexDirection: 'row',
         marginTop: 10,
         borderBottomWidth: 1,
         borderBottomColor: '#FF0000',
-        paddingBottom: 5
+        paddingBottom: 5,
+        fontFamily: 'mbold'
     },
     textInput: {
         flex: 1,
         marginTop: Platform.OS === 'ios' ? 0 : -12,
         paddingLeft: 10,
         color: '#05375a',
+        fontFamily: 'mbold'
     },
     errorMsg: {
         color: '#FF0000',
         fontSize: 14,
+        fontFamily: 'mbold'
     },
     button: {
         alignItems: 'center',
-        marginTop: 50
+        marginTop: 50,
+        fontFamily: 'mbold'
     },
-    signIn: {
-        width: '100%',
-        height: 50,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 10
-    },
+
     textSign: {
         fontSize: 18,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontFamily: 'mbold'
     },
     iconConnect: {
         marginBottom: 20,
@@ -100,6 +105,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         right: 0,
         bottom: 0,
+        fontFamily: 'mbold'
     }
 })
 

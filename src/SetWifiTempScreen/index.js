@@ -106,7 +106,7 @@ class SetWifiTempScreen extends Component {
                onPress = {
                   () => this.initwifi(this.state.ssid, this.state.password)
                }>
-               <Text style = {styles.submitButtonText}> Send to Device </Text>
+               <Text style = {styles.submitButtonText}> Send to Temperature Device </Text>
             </TouchableOpacity>
             {/* <TouchableOpacity  onPress={this.getdatawifinya}>
             <Text style={{fontSize: 30}}> Get Temperature Data </Text>
