@@ -41,10 +41,10 @@ export default class WeightScreen extends React.Component {
   }
 
   async notifBtn() {
-    const id = "24:6F:28:24:BF:1A"
-    const characteristicID = 'a8e6a804-216b-4dd8-90ff-a230226b42c1'
-    const serviceID = '182d'
-  await BleManager.startNotification(id, serviceID, 'a8e6a804-216b-4dd8-90ff-a230226b42c1');
+    const id = "10:52:1C:68:14:E2"
+    const characteristicID = '1006'
+    const serviceID = '180D'
+  await BleManager.startNotification(id, serviceID, '1006');
   // Add event listener
   bleManagerEmitter.addListener(
     "BleManagerDidUpdateValueForCharacteristic",
@@ -65,7 +65,7 @@ const key = '591825e3a4f2c9b8f73eb963c77ad160d4802ad7aadc179b066275bcb9d9cfd2';
 const iv = '0123456789abcdef0123456789abcdef';
 const value = this.state.databerat;
 const encryptDataIV = (value, key, iv) => {
-console.log ("mulai");
+console.log ("mulai enkrip");
 return Aes.encrypt(value, key, iv).then((cipher: any) => ({
 cipher,
 iv,
@@ -75,11 +75,11 @@ try {
 encryptDataIV(value, key, iv).then(({ cipher }) => {
 console.log ("encrypted : " + cipher);
 axios.post('http://159.89.204.122/input/berat', {
-berat: this.state.encrypt_string,
+berat: this.state.cipher,
 })
 .then(function (response) {
-console.log(this.state.encrypt_string);
 Alert.alert('Body Weight Value tersimpan di Database');
+console.log('Data sent');
 })
 .catch(function (error) {
 console.log(error);
@@ -97,6 +97,7 @@ console.error(e)
      const decryptData = (encryptedData: { cipher: any; iv: any; }, key: any) => Aes.decrypt(encryptedData.cipher, key, encryptedData.iv)
 
      try {
+      console.log ("mulai dekrip");
       var decrypt_string = await decryptData({ cipher, iv }, key);
        console.log ("plain text : " + decrypt_string);
        this.setState({hasildekrip: decrypt_string });
@@ -105,9 +106,9 @@ console.error(e)
     }
    }
   async writeBtn1(){
-   const id = "24:6F:28:24:BF:1A"
+   const id = "10:52:1C:68:14:E2"
     const characteristicID = '78604f25-789e-432e-b949-6fb2306fd5d7'
-    const serviceID = '182d'
+    const serviceID = '180D'
     
     const data = stringToBytes('1');
     console.log(data)
@@ -144,9 +145,9 @@ console.error(e)
       //   });
       // }, 200);
      async getdrAPI (){
-     axios.get('http://159.89.204.122/info/ambilberat')
+     axios.get('http://159.89.204.122/info/berat')
     .then(response => 
-    this.setState({nilaiberat: response.data.webserver1[0].berat}))
+    this.setState({nilaiberat: response.data.webserver1[0].berat.berat}))
     .catch(err => console.log(err))
      };
     // axios.get('http://159.89.204.122/info/dj')

@@ -19,7 +19,7 @@ class SetWifiHeartScreen extends Component {
    }
    initwifi = (ssid, password) => {
       Alert.alert('SSID: ' + ssid + ' Password: ' + password)
-      const id = "3C:71:BF:74:8D:2E"
+      const id = "10:52:1C:68:14:E2"
       const serviceID = '180d'
     
     const dua = stringToBytes('2');
@@ -106,7 +106,7 @@ class SetWifiHeartScreen extends Component {
                onPress = {
                   () => this.initwifi(this.state.ssid, this.state.password)
                }>
-               <Text style = {styles.submitButtonText}> Send to Weight Device </Text>
+               <Text style = {styles.submitButtonText}> Send to ECG Device </Text>
             </TouchableOpacity>
             {/* <TouchableOpacity  onPress={this.getdatawifinya}>
             <Text style={{fontSize: 30}}> Get Temperature Data </Text>

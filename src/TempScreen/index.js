@@ -45,7 +45,7 @@ export default class TempScreen extends React.Component {
     const characteristicID = 'a8e6a804-216b-4dd8-90ff-a230226b42c1'
     const serviceID = '181a'
   await BleManager.startNotification(id, serviceID, characteristicID);
-  // Add event listener
+
   bleManagerEmitter.addListener(
     "BleManagerDidUpdateValueForCharacteristic",
     ({ value}) => {
@@ -57,7 +57,7 @@ export default class TempScreen extends React.Component {
       console.log('Received ' +data);
     }
   );
-  // Actions triggereng BleManagerDidUpdateValueForCharacteristic event
+  
 }
  
 async postkeAPI (){
@@ -65,7 +65,7 @@ const key = '591825e3a4f2c9b8f73eb963c77ad160d4802ad7aadc179b066275bcb9d9cfd2';
 const iv = '0123456789abcdef0123456789abcdef';
 const value = this.state.datasuhu;
 const encryptDataIV = (value, key, iv) => {
-console.log ("mulai");
+console.log ("mulai enkripsi " + value);
 return Aes.encrypt(value, key, iv).then((cipher: any) => ({
 cipher,
 iv,
@@ -78,7 +78,6 @@ axios.post('http://159.89.204.122/input/suhu', {
 suhu: this.state.encrypt_string,
 })
 .then(function (response) {
-console.log(this.state.encrypt_string);
 Alert.alert('Body Temperature Value tersimpan di Database');
 })
 .catch(function (error) {
@@ -97,6 +96,7 @@ console.error(e)
      const decryptData = (encryptedData: { cipher: any; iv: any; }, key: any) => Aes.decrypt(encryptedData.cipher, key, encryptedData.iv)
 
      try {
+      console.log ("mulai dekrip " + cipher);
       var decrypt_string = await decryptData({ cipher, iv }, key);
        console.log ("plain text : " + decrypt_string);
        this.setState({hasildekrip: decrypt_string });
@@ -113,7 +113,7 @@ console.error(e)
     console.log(data)
 
     BleManager.retrieveServices(id).then((peripheralInfo) => {
-      //console.log(peripheralInfo);
+    
       setTimeout(() => {
         BleManager.write(id, serviceID, characteristicID, data).then(() => {
           console.log("Success Write");
@@ -125,48 +125,14 @@ console.error(e)
       }, 500);
     });
   }
-      // BleManager.startNotification(id, serviceID, '1006');
-  
-  //     bleManagerEmitter.addListener(
-  //       "BleManagerDidUpdateValueForCharacteristic",
-  //       ( value, id, serviceID, '1006' ) => {
-  //         const data = value;
-  //         console.log('Received ' +data);
-  //       }
-  // );
 
-      // setTimeout(() => {
-      //   BleManager.startNotification(id, serviceID, '1006').then(() => {
-      //     console.log('Started notification on ' + id);
-          
-      //   }).catch((error) => {
-      //     console.log('Notification error', error);
-      //   });
-      // }, 200);
      async getdrAPI (){
      axios.get('http://159.89.204.122/info/ambilsuhu')
     .then(response => 
     this.setState({nilaisuhu: response.data.webserver1[0].suhu}))
     .catch(err => console.log(err))
      };
-    // axios.get('http://159.89.204.122/info/dj')
-    // .then(function (response) {
-    //   const heart = response.data.webserver1[0].heart;
-    //   console.log(heart);
-    //   this.setState({nilaisuhu: heart});
-    // })
-    // // this.setState({heart: data});
-    // return fetch('http://159.89.204.122/info/dj')
-    // .then((response) => response.json())
-    // .then((json)  =>  {
-    //   // setHeart(json.Heart_Rate);
-    //   console.log(json.webserver1.Heart_Rate);
-    //   return json;
-    // })
-    // .catch((error) => {
-    //   console.error(error);
-    // });
-  
+    
   
   render(){
     return (

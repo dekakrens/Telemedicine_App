@@ -31,16 +31,18 @@ export default class HeartScreen extends React.Component {
           keterangan: '',
           encrypt_string: '',
           nilaijantung: '',
+          hasildekrip:'',
   }
 
     this.writeBtn1 = this.writeBtn1.bind(this);
     this.notifBtn = this.notifBtn.bind(this);
     this.getdrAPI = this.getdrAPI.bind(this);
     this.postkeAPI = this.postkeAPI.bind(this);
+    this.decryptAES = this.decryptAES.bind(this);
   }
-
+  
   async notifBtn() {
-    const id = "3C:71:BF:74:8D:2E"
+    const id = "10:52:1C:68:14:E2"
     const characteristicID = '1006'
     const serviceID = '180d'
   await BleManager.startNotification(id, serviceID, characteristicID);
@@ -95,7 +97,7 @@ async postkeAPI (){
   }
   }
   async writeBtn1(){
-    const id = "3C:71:BF:74:8D:2E"
+    const id = "10:52:1C:68:14:E2"
     const characteristicID = '78604f25-789e-432e-b949-6fb2306fd5d7'
     const serviceID = '180d'
     
@@ -135,31 +137,36 @@ async postkeAPI (){
       // }, 200);
      async getdrAPI (){
      axios.get('http://159.89.204.122/info/dj')
-    .then(response => this.setState({nilaijantung: response.data.webserver1[0].heart}))
+    .then(response => 
+    this.setState({nilaijantung: response.data.webserver1[0].heart.heart}))
     .catch(err => console.log(err))
-    // axios.get('http://159.89.204.122/info/dj')
-    // .then(function (response) {
-    //   const heart = response.data.webserver1[0].heart;
-    //   console.log(heart);
-    //   this.setState({nilaisuhu: heart});
-    // })
-    // // this.setState({heart: data});
-    // return fetch('http://159.89.204.122/info/dj')
-    // .then((response) => response.json())
-    // .then((json)  =>  {
-    //   // setHeart(json.Heart_Rate);
-    //   console.log(json.webserver1.Heart_Rate);
-    //   return json;
-    // })
-    // .catch((error) => {
-    //   console.error(error);
-    // });
-  };
-  
+     };
+   
+   async decryptAES () {
+   const key = '591825e3a4f2c9b8f73eb963c77ad160d4802ad7aadc179b066275bcb9d9cfd2';
+     const iv = '0123456789abcdef0123456789abcdef';
+     const cipher = this.state.nilaijantung;
+     const decryptData = (encryptedData: { cipher: any; iv: any; }, key: any) => Aes.decrypt(encryptedData.cipher, key, encryptedData.iv)
+
+     try {
+      var decrypt_string = await decryptData({ cipher, iv }, key);
+       console.log ("plain text : " + decrypt_string);
+       this.setState({hasildekrip: decrypt_string });
+       if (this.state.hasildekrip<50){
+        this.setState({keterangan2: 'Detak Jantung Terlalu Rendah'});
+      } else if (this.state.databpm>100){
+        this.setState({keterangan2: 'Detak Jantung Terlalu Tinggi'});
+      } else {
+        this.setState({keterangan2: 'Detak Jantung Anda Normal'});
+      }
+     } catch (e) {
+         console.error(e)
+    }
+   }
   render(){
     return (
       <View style={{flex: 1}} >
-        <View style={{flex: 0.3, backgroundColor: 'powderblue'}}> 
+        <View style={{flex: 0.4, backgroundColor: 'powderblue'}}> 
         <Icon name='fitness-outline' size={75}>
         <Text style={{ fontSize: 25, marginBottom: 20, textAlign: 'center', fontFamily: 'mbold'}}>Heart Rate</Text> </Icon>
         </View>
@@ -171,9 +178,12 @@ async postkeAPI (){
           <Text style={{fontSize: 15, fontFamily : 'mmedium'}}>Send Data via Wi-Fi</Text>
         </TouchableOpacity>
         </View>
-        <View style={{ margin: 20}}> 
-        <TouchableOpacity style={styles.style2ni} onPress={this.notifBtn}>
+        <View style={{flexDirection:'row', margin : 20}}>
+        <TouchableOpacity style={styles.connectBtn} onPress={this.notifBtn}>
           <Text style={{fontSize: 15, fontFamily : 'mmedium'}}>Get Data from BLE</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.connectBtn} onPress={this.getdrAPI}>
+          <Text style={{fontSize: 15, fontFamily : 'mmedium'}}>Get Data from Wifi</Text>
         </TouchableOpacity>
         </View>
         <View style={styles.style3ni}>
@@ -191,15 +201,25 @@ async postkeAPI (){
             {this.state.keterangan}
         </Text>
         </View>
-        <Text style={{fontSize: 20, fontFamily : 'mmedium'}}>
-            {this.state.nilaijantung}
-        </Text>
         <TouchableOpacity style={styles.connectBtn} onPress={this.postkeAPI}>
           <Text style={{fontSize: 15, fontFamily : 'mmedium'}}>Save Heart Rate Value to Server</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.connectBtn} onPress={this.getdrAPI}>
-          <Text style={{fontSize: 15, fontFamily : 'mmedium'}}>Get Heart Rate Value from Server</Text>
+        <View>
+        <TouchableOpacity style={styles.style4ni} onPress={this.decryptAES}>
+          <Text style={{fontSize: 15, fontFamily : 'mmedium'}}>Show Heart Rate Value from Server</Text>
         </TouchableOpacity>
+        </View>
+        <View style={styles.style3ni}>
+        <Text style={{fontSize: 40, fontFamily : 'mmedium'}}>
+            {this.state.hasildekrip} bpm
+        </Text>
+        </View>
+        <View style={styles.style3ni}>
+        <Text style={{fontSize: 20, fontFamily : 'mbold'}}>
+            {this.state.keterangan2}
+        </Text>
+        </View>
+        
       </View>
       );
   }
@@ -220,6 +240,12 @@ const styles = StyleSheet.create({
   },
   style3ni: {
     alignSelf: "center",
+    margin: 5
+  },
+  style4ni: {
+    alignSelf: "center",
+    borderWidth : 2,
+    borderColor : 'red',
     margin: 5
   }
 });
